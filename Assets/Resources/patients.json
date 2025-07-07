@@ -1,0 +1,293 @@
+{
+  "patients": [
+    {
+      "initialPhrase": "Me duele mucho la cabeza y tengo visión borrosa.",
+      "detailedQuestions": [
+        "¿Ha tenido migrañas anteriormente?",
+        "¿Cuándo comenzó a sentir estos síntomas?",
+        "¿Ha tomado algún medicamento recientemente?"
+      ],
+      "directQuestions": [
+        "¿Tiene fiebre?",
+        "¿Le duele al mover los ojos?",
+        "¿Ha sufrido un golpe en la cabeza?"
+      ],
+      "ignoreResponses": [
+        "El paciente fue dejado en observación.",
+        "Se pidió que esperara en la sala de urgencias.",
+        "El caso fue pospuesto por falta de personal."
+      ],
+      "consequence": "Posible caso de migraña severa. Se deriva a neurología para evaluación."
+    },
+    {
+      "initialPhrase": "Tengo dolor en el abdomen y náuseas desde anoche.",
+      "detailedQuestions": [
+        "¿Comió algo fuera de lo común recientemente?",
+        "¿Dónde exactamente siente el dolor?",
+        "¿Tiene diarrea o vómito?"
+      ],
+      "directQuestions": [
+        "¿Tiene fiebre o escalofríos?",
+        "¿El dolor es constante o intermitente?",
+        "¿Le duele al presionar el abdomen?"
+      ],
+      "ignoreResponses": [
+        "El paciente no fue atendido a tiempo.",
+        "Se lo dirigió a un centro de atención general.",
+        "Se ignoró el caso por falta de información."
+      ],
+      "consequence": "Se sospecha apendicitis. Se envía a estudios de imagen de urgencia."
+    },
+    {
+      "initialPhrase": "Tengo dificultad para respirar y opresión en el pecho.",
+      "detailedQuestions": [
+        "¿Ha tenido estos síntomas antes?",
+        "¿Fuma o ha estado expuesto a humo?",
+        "¿Está bajo mucho estrés últimamente?"
+      ],
+      "directQuestions": [
+        "¿Le falta el aire incluso en reposo?",
+        "¿Tiene tos con flema?",
+        "¿Siente el corazón acelerado?"
+      ],
+      "ignoreResponses": [
+        "Se programó una cita para el día siguiente.",
+        "Fue referido a medicina general.",
+        "Se le indicó esperar turno."
+      ],
+      "consequence": "Posible ataque de asma o evento cardíaco. Se traslada a urgencias."
+    },
+    {
+      "initialPhrase": "Me siento muy cansado últimamente, sin razón aparente.",
+      "detailedQuestions": [
+        "¿Duerme bien por las noches?",
+        "¿Ha tenido cambios en su alimentación?",
+        "¿Está tomando algún medicamento?"
+      ],
+      "directQuestions": [
+        "¿Ha perdido peso recientemente?",
+        "¿Tiene palpitaciones?",
+        "¿Siente mareos?"
+      ],
+      "ignoreResponses": [
+        "El paciente no fue considerado urgente.",
+        "No se revisó el expediente clínico.",
+        "El médico no estaba disponible."
+      ],
+      "consequence": "Se solicita análisis de sangre. Posible anemia o hipotiroidismo."
+    },
+    {
+      "initialPhrase": "Me arde al orinar y tengo que ir al baño constantemente.",
+      "detailedQuestions": [
+        "¿Desde cuándo presenta estos síntomas?",
+        "¿Ha tenido infecciones urinarias antes?",
+        "¿Ha tenido fiebre recientemente?"
+      ],
+      "directQuestions": [
+        "¿La orina tiene mal olor?",
+        "¿Siente dolor en la parte baja del abdomen?",
+        "¿Ve sangre en la orina?"
+      ],
+      "ignoreResponses": [
+        "Se perdió el expediente clínico.",
+        "No se registraron los síntomas.",
+        "Se reprogramó la consulta sin revisión."
+      ],
+      "consequence": "Infección urinaria. Se receta antibiótico y se solicita urocultivo."
+    },
+    {
+      "initialPhrase": "Tengo una tos seca que no se va desde hace dos semanas.",
+      "detailedQuestions": [
+        "¿Tiene antecedentes de alergias?",
+        "¿Fuma o ha estado en ambientes contaminados?",
+        "¿Siente dolor al toser?"
+      ],
+      "directQuestions": [
+        "¿Ha tenido fiebre o sudores nocturnos?",
+        "¿Le falta el aire?",
+        "¿Ha perdido peso?"
+      ],
+      "ignoreResponses": [
+        "No se escucharon los pulmones.",
+        "El paciente se retiró sin atención.",
+        "El personal omitió el seguimiento."
+      ],
+      "consequence": "Posible bronquitis crónica o inicio de tuberculosis. Se indican radiografías de tórax."
+    },
+    {
+      "initialPhrase": "Tengo una erupción en la piel que me pica mucho.",
+      "detailedQuestions": [
+        "¿La erupción apareció de repente?",
+        "¿Ha cambiado de jabón o detergente?",
+        "¿Comió algo diferente recientemente?"
+      ],
+      "directQuestions": [
+        "¿Tiene fiebre?",
+        "¿La erupción se ha extendido?",
+        "¿Hay ampollas o heridas?"
+      ],
+      "ignoreResponses": [
+        "El área no fue revisada.",
+        "No se consultó dermatología.",
+        "Se le pidió que comprara una crema sin diagnóstico."
+      ],
+      "consequence": "Dermatitis alérgica. Se indica antihistamínico y evitar el contacto con alérgeno."
+    },
+    {
+      "initialPhrase": "Me siento mareado y con zumbido en los oídos.",
+      "detailedQuestions": [
+        "¿Ha tenido vértigo anteriormente?",
+        "¿Ha viajado recientemente en avión o auto?",
+        "¿Tiene problemas de presión arterial?"
+      ],
+      "directQuestions": [
+        "¿Siente que todo le da vueltas?",
+        "¿Tiene pérdida de audición?",
+        "¿Ha tenido náuseas?"
+      ],
+      "ignoreResponses": [
+        "No se revisó el oído.",
+        "El paciente fue derivado sin explicación.",
+        "Se retrasó la atención sin motivo."
+      ],
+      "consequence": "Posible laberintitis o hipertensión. Se deriva a otorrino y se revisa presión arterial."
+    },
+    {
+      "initialPhrase": "Me duele la espalda baja y no puedo agacharme.",
+      "detailedQuestions": [
+        "¿Cuándo empezó el dolor?",
+        "¿Ha hecho esfuerzo físico recientemente?",
+        "¿Ha tenido problemas similares antes?"
+      ],
+      "directQuestions": [
+        "¿Le duele al caminar?",
+        "¿Tiene debilidad en las piernas?",
+        "¿Siente entumecimiento?"
+      ],
+      "ignoreResponses": [
+        "No se pidió radiografía.",
+        "Se ignoró el historial clínico.",
+        "Se le pidió que esperara varias horas sin atención."
+      ],
+      "consequence": "Lumbalgia aguda. Se prescribe reposo, antiinflamatorios y se sugiere fisioterapia."
+    },
+    {
+      "initialPhrase": "Mi hijo tiene fiebre alta y no quiere comer.",
+      "detailedQuestions": [
+        "¿Desde cuándo tiene fiebre?",
+        "¿Le ha dado algún medicamento?",
+        "¿Ha tenido contacto con alguien enfermo?"
+      ],
+      "directQuestions": [
+        "¿Tiene tos o congestión?",
+        "¿Ha vomitado o tiene diarrea?",
+        "¿Está decaído o irritable?"
+      ],
+      "ignoreResponses": [
+        "Se desestimó por ser niño.",
+        "No se revisó temperatura.",
+        "Se pospuso la consulta pediátrica."
+      ],
+      "consequence": "Infección viral o bacteriana. Se realiza revisión pediátrica urgente."
+    },
+{
+      "initialPhrase": "Tengo palpitaciones y siento que me falta el aire de repente.",
+      "detailedQuestions": [
+        "¿Cuándo comenzaron las palpitaciones?",
+        "¿Ha estado sometido a estrés o ansiedad últimamente?",
+        "¿Está tomando algún medicamento o estimulante?"
+      ],
+      "directQuestions": [
+        "¿Tiene dolor en el pecho?",
+        "¿Se le entumecen las extremidades?",
+        "¿Ha tenido desmayos?"
+      ],
+      "ignoreResponses": [
+        "El paciente fue derivado sin electrocardiograma.",
+        "Se consideró ansiedad sin evaluación clínica.",
+        "Se aplazó la revisión médica."
+      ],
+      "consequence": "Posible arritmia o ataque de pánico. Se indica ECG y valoración cardiológica."
+    },
+    {
+      "initialPhrase": "Siento entumecimiento en la mano derecha y debilidad.",
+      "detailedQuestions": [
+        "¿Hace cuánto comenzó el entumecimiento?",
+        "¿Ha tenido problemas con la columna cervical?",
+        "¿Trabaja mucho con computadoras o movimientos repetitivos?"
+      ],
+      "directQuestions": [
+        "¿Siente dolor en el cuello?",
+        "¿Puede cerrar la mano con fuerza?",
+        "¿Se le cae algún objeto al sujetarlo?"
+      ],
+      "ignoreResponses": [
+        "Se ignoró la limitación de movimiento.",
+        "No se indicó electromiografía.",
+        "Se minimizó el síntoma como 'agotamiento'."
+      ],
+      "consequence": "Síndrome del túnel carpiano o radiculopatía cervical. Se deriva a neurología y se piden estudios."
+    },
+    {
+      "initialPhrase": "Tengo una llaga que no cicatriza en la pierna desde hace semanas.",
+      "detailedQuestions": [
+        "¿Tiene antecedentes de diabetes?",
+        "¿Se hizo alguna herida previamente en esa zona?",
+        "¿La ha estado limpiando o tratando con algo?"
+      ],
+      "directQuestions": [
+        "¿Supura líquido?",
+        "¿Se ha puesto roja o caliente?",
+        "¿Duele al tocarla?"
+      ],
+      "ignoreResponses": [
+        "No se revisó visualmente la herida.",
+        "No se tomó muestra para cultivo.",
+        "No se registró en el expediente."
+      ],
+      "consequence": "Úlcera posiblemente infecciosa. Se requiere cultivo y manejo especializado."
+    },
+    {
+      "initialPhrase": "Estoy perdiendo peso sin hacer dieta ni ejercicio.",
+      "detailedQuestions": [
+        "¿Desde cuándo ha notado la pérdida de peso?",
+        "¿Ha cambiado sus hábitos alimenticios?",
+        "¿Tiene antecedentes de enfermedades crónicas?"
+      ],
+      "directQuestions": [
+        "¿Ha tenido fiebre o sudoración nocturna?",
+        "¿Tiene fatiga constante?",
+        "¿Ha notado masas o inflamaciones?"
+      ],
+      "ignoreResponses": [
+        "No se pidió análisis de sangre.",
+        "El paciente fue diagnosticado sin pruebas.",
+        "Se asumió que era por estrés sin indagar."
+      ],
+      "consequence": "Posible hipertiroidismo o patología oncológica. Se solicitan estudios de laboratorio y gabinete."
+    },
+    {
+      "initialPhrase": "Me duelen mucho las articulaciones, sobre todo al despertar.",
+      "detailedQuestions": [
+        "¿Desde cuándo tiene estos síntomas?",
+        "¿Hay antecedentes familiares de artritis?",
+        "¿El dolor mejora durante el día?"
+      ],
+      "directQuestions": [
+        "¿Tiene rigidez matutina?",
+        "¿Hay hinchazón en las articulaciones?",
+        "¿Tiene fiebre o fatiga?"
+      ],
+      "ignoreResponses": [
+        "Se indicó solo paracetamol sin diagnóstico.",
+        "No se pidió estudio reumatológico.",
+        "El caso fue tratado como dolor muscular común."
+      ],
+      "consequence": "Posible artritis reumatoide. Se indica valoración reumatológica y estudios de anticuerpos."
+    }
+  ]
+
+
+  
+}
+
