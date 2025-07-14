@@ -159,7 +159,9 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      BOTONES JUNTOS_0: -988336370216974433
+      BOTONES JUNTOS_1: 7253719458957218476
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
