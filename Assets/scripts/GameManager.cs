@@ -64,13 +64,10 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        // Tecla Tab
         if (Input.GetKeyDown(KeyCode.Tab))
         {
-            if (MostrarBotonesB)
-                OcultarBotones();
-            else
-                MostrarBotones();
+            if (MostrarBotonesB) OcultarBotones();
+            else MostrarBotones();
         }
 
         if (Input.GetMouseButtonDown(0)) OnLeftClick();
@@ -154,8 +151,12 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < count; i++)
         {
             GameObject doc = Instantiate(documentPrefabs[(int)tipoActual], spawnParent);
+
+            // ⚠️ Cast explícito de TipoArchivo a DocumentType
+            DocumentType tipoDoc = (DocumentType)tipoActual;
+
             DocumentBehavior behavior = doc.GetComponent<DocumentBehavior>();
-            behavior.Init(tipoActual, Random.value > errorChance, (int)tipoActual);
+            behavior.Init(tipoDoc, Random.value > errorChance, (int)tipoActual);
         }
     }
 
@@ -311,6 +312,7 @@ public class GameManager : MonoBehaviour
     }
 }
 
+// Tu enum local
 public enum TipoArchivo
 {
     Rojo,
@@ -318,6 +320,7 @@ public enum TipoArchivo
     Azul,
     Amarillo
 }
+
 
 /*using UnityEngine;
 using TMPro; // ← Asegúrate de tener esto arriba
