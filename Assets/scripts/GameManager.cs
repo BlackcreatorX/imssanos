@@ -1,5 +1,328 @@
-
 using UnityEngine;
+using TMPro;
+
+public class GameManager : MonoBehaviour
+{
+    private Camera mainCamera;
+    private GameObject selectedObject;
+    private Vector3 offset;
+
+    [Header("Puntaje y Energía")]
+    public int Puntuacion = 0;
+    public int energia = 100;
+    public int EnClick = 2;
+
+    [Header("Documentos")]
+    public GameObject[] documentPrefabs;
+    public Transform spawnParent;
+    [Range(0f, 1f)] public float errorChance = 0.5f;
+    public int documentsToGenerate = 5;
+    public TipoArchivo tipoActual = TipoArchivo.Rojo;
+
+    [Header("Comida")]
+    private bool enEspera = false;
+    private float tiempoEsperaRestante = 0f;
+
+    [Header("Temporizador")]
+    public float duracion = 60f;
+    private float tiempoRestante;
+    private float intervaloMensaje = 15f;
+    private float siguienteMensaje;
+    private bool temporizadorActivo = false;
+
+    [Header("Cajas")]
+    public GameObject cajasRojo;
+    public GameObject cajasVerde;
+    public GameObject cajasAzul;
+    public GameObject cajasAmarillo;
+
+    [Header("UI")]
+    public GameObject BotonesUI;
+    public bool MostrarBotonesB = false;
+    public bool PacienteActivo = false;
+    public GameObject npc;
+    public TextMeshProUGUI energiaText;
+    public TextMeshProUGUI ColorDoc;
+
+    void Start()
+    {
+        mainCamera = Camera.main;
+        Debug.Log("Energía inicial: " + energia);
+        IniciarTemporizador(duracion);
+    }
+
+    void Update()
+    {
+        if (enEspera)
+        {
+            tiempoEsperaRestante -= Time.deltaTime;
+            if (tiempoEsperaRestante <= 0)
+            {
+                enEspera = false;
+                Debug.Log("✅ Espera terminada. Puedes volver a jugar.");
+            }
+            return;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            if (MostrarBotonesB) OcultarBotones();
+            else MostrarBotones();
+        }
+
+        if (Input.GetMouseButtonDown(0)) OnLeftClick();
+        if (Input.GetMouseButtonDown(1)) OnRightClick();
+
+        HandleObjectDragging();
+        CheckEnergia();
+        TemporizadorUpdate();
+        ActualizarEnergiaUI();
+    }
+
+    void OnLeftClick()
+    {
+        DetectarComida();
+        Vector2 mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+        RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
+
+        if (hit.collider == null) return;
+        string tag = hit.collider.tag;
+
+        if (tag == "Aceptar")
+        {
+            if (!PacienteActivo) ActivarPaciente();
+            else DesactivarPaciente("urgencias");
+        }
+        else if (tag == "Denegar")
+        {
+            if (PacienteActivo) DesactivarPaciente("alta");
+            else Debug.Log("No hay paciente activo");
+        }
+    }
+
+    void OnRightClick()
+    {
+        if (enEspera)
+        {
+            Debug.Log("❗ No puedes hacer clic derecho mientras comes.");
+            return;
+        }
+
+        Vector2 mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+        RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
+        if (hit.collider == null) return;
+
+        string tag = hit.collider.tag;
+        string nombre = hit.collider.gameObject.name;
+
+        if (tag == "TDoc" || hit.collider.transform.parent?.CompareTag("TDoc") == true)
+        {
+            Debug.Log("CLICK DERECHO sobre documento: " + nombre);
+            GastarEnergia(EnClick);
+        }
+        else if (EsCajaValida(tag))
+        {
+            Debug.Log("CLICK DERECHO sobre caja: " + nombre);
+            GastarEnergia(EnClick);
+        }
+    }
+
+    void ActivarPaciente()
+    {
+        PacienteActivo = true;
+        npc.SetActive(true);
+        Debug.Log("Paciente activo");
+        tipoActual = (TipoArchivo)Random.Range(0, 4);
+        Debug.Log("Tipo de archivo generado: " + tipoActual);
+        GenerateDocuments(documentsToGenerate);
+        ColorDeArchivo();
+    }
+
+    void DesactivarPaciente(string motivo)
+    {
+        PacienteActivo = false;
+        npc.SetActive(false);
+        Debug.Log($"Paciente fue ingresado a {motivo}");
+        DestruirTodosLosDocumentos();
+    }
+
+    void GenerateDocuments(int count)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            GameObject doc = Instantiate(documentPrefabs[(int)tipoActual], spawnParent);
+
+            // ⚠️ Cast explícito de TipoArchivo a DocumentType
+            DocumentType tipoDoc = (DocumentType)tipoActual;
+
+            DocumentBehavior behavior = doc.GetComponent<DocumentBehavior>();
+            behavior.Init(tipoDoc, Random.value > errorChance, (int)tipoActual);
+        }
+    }
+
+    void HandleObjectDragging()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            RaycastHit2D hit = Physics2D.Raycast(mainCamera.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
+            if (hit.collider != null && hit.collider.CompareTag("TDoc"))
+            {
+                selectedObject = hit.collider.gameObject;
+                offset = selectedObject.transform.position - mainCamera.ScreenToWorldPoint(Input.mousePosition);
+            }
+        }
+
+        if (Input.GetMouseButton(0) && selectedObject != null)
+        {
+            Vector3 newPosition = mainCamera.ScreenToWorldPoint(Input.mousePosition) + offset;
+            newPosition.z = 0;
+            selectedObject.transform.position = newPosition;
+        }
+
+        if (Input.GetMouseButtonUp(0) && selectedObject != null)
+        {
+            Vector2 mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+            RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
+
+            if (hit.collider != null)
+            {
+                GameObject caja = hit.collider.gameObject;
+
+                if (EsCajaValida(caja.tag))
+                    VerificarCaja(caja);
+                else
+                    Debug.Log("❗ Documento soltado fuera de una caja.");
+            }
+            else
+            {
+                Debug.Log("❗ Documento soltado fuera de cualquier objeto.");
+            }
+
+            selectedObject = null;
+        }
+    }
+
+    void VerificarCaja(GameObject caja)
+    {
+        if (selectedObject == null) return;
+
+        string tagEsperado = "Caja" + tipoActual.ToString();
+        bool enCajaCorrecta = caja.CompareTag(tagEsperado);
+
+        Debug.Log(enCajaCorrecta ? "✅ Caja correcta" : "❌ Caja incorrecta");
+        Destroy(selectedObject);
+    }
+
+    void DetectarComida()
+    {
+        if (enEspera) return;
+
+        Vector2 mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+        RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
+
+        if (hit.collider != null && hit.collider.CompareTag("Comida"))
+            Comer(hit.collider.gameObject);
+    }
+
+    void Comer(GameObject comida)
+    {
+        energia = Mathf.Clamp(energia + 50, 0, 100);
+        Debug.Log("🍽️ Comiendo... Energía recuperada: " + energia);
+        enEspera = true;
+        tiempoEsperaRestante = 10f;
+    }
+
+    void CheckEnergia()
+    {
+        if (energia <= 0)
+            Debug.Log("Energía agotada. Se debe de comer.");
+    }
+
+    void GastarEnergia(int cantidad)
+    {
+        energia = Mathf.Clamp(energia - cantidad, 0, 100);
+        Debug.Log("Energía restante: " + energia);
+    }
+
+    void ActualizarEnergiaUI()
+    {
+        energiaText?.SetText("Energía: " + energia);
+    }
+
+    void IniciarTemporizador(float tiempo)
+    {
+        duracion = tiempo;
+        tiempoRestante = tiempo;
+        siguienteMensaje = tiempo - intervaloMensaje;
+        temporizadorActivo = true;
+    }
+
+    void TemporizadorUpdate()
+    {
+        if (!temporizadorActivo || tiempoRestante <= 0) return;
+
+        tiempoRestante -= Time.deltaTime;
+
+        if (tiempoRestante <= siguienteMensaje && tiempoRestante > 0)
+        {
+            Debug.Log("Tiempo restante: " + Mathf.Ceil(tiempoRestante) + " segundos");
+            energia = Mathf.Clamp(energia - 2, 0, 100);
+            Debug.Log("Energía actual: " + energia);
+            siguienteMensaje -= intervaloMensaje;
+        }
+
+        if (tiempoRestante <= 0)
+        {
+            Debug.Log("¡El tiempo se ha acabado!");
+            temporizadorActivo = false;
+        }
+    }
+
+    void ColorDeArchivo()
+    {
+        if (ColorDoc != null)
+            ColorDoc.text = tipoActual.ToString();
+    }
+
+    public void MostrarBotones()
+    {
+        BotonesUI?.SetActive(true);
+        MostrarBotonesB = true;
+        Debug.Log("Botones de UI mostrados");
+    }
+
+    public void OcultarBotones()
+    {
+        BotonesUI?.SetActive(false);
+        MostrarBotonesB = false;
+        Debug.Log("Botones de UI ocultos");
+    }
+
+    void DestruirTodosLosDocumentos()
+    {
+        foreach (Transform child in spawnParent)
+        {
+            Destroy(child.gameObject);
+        }
+    }
+
+    bool EsCajaValida(string tag)
+    {
+        return tag == "CajaRojo" || tag == "CajaVerde" || tag == "CajaAzul" || tag == "CajaAmarillo";
+    }
+}
+
+// Tu enum local
+public enum TipoArchivo
+{
+    Rojo,
+    Verde,
+    Azul,
+    Amarillo
+}
+
+
+/*using UnityEngine;
 using TMPro; // ← Asegúrate de tener esto arriba
 
 
@@ -412,4 +735,4 @@ void DestruirTodosLosDocumentos()
 
 
 
-}
+}*/
